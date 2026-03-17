@@ -1,5 +1,5 @@
 # Dependencies
-node_modules/
+node_modules
 
 # Environment variables
 .env
@@ -18,24 +18,24 @@ pids
 *.pid.lock
 
 # Build / production
-dist/
-build/
+dist
+build
 
 # OS files
 .DS_Store
 Thumbs.db
 
 # IDE / Editor
-.vscode/
-.idea/
+.vscode
+.idea
 
 # Optional: uploads (if you store files locally)
-uploads/
-public/uploads/
+uploads
+public/uploads
 
 # Optional: coverage (testing)
-coverage/
+coverage
 
 # Optional: temp files
-tmp/
-temp/
+tmp
+temp
