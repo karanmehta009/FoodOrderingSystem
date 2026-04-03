@@ -28,11 +28,13 @@ export const createOrder = async (req, res) => {
 export const getUserOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user._id })
-      .populate("foods")
+      .populate({
+        path: "foods.food",
+        model: "Food",
+      })
       .sort({ createdAt: -1 });
-    res.json({
-      orders,
-    });
+
+    res.json({ orders });
   } catch (error) {
     res.status(500).json({
       message: "error fetching user orders",
@@ -40,13 +42,15 @@ export const getUserOrders = async (req, res) => {
     });
   }
 };
-
 // Get all user order for (admin)
 
 export const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate("foods")
+      .populate({
+        path: "foods.food",
+        model: "Food",
+      })
       .populate("user", "name email")
       .sort({ createdAt: -1 });
 
@@ -87,7 +91,7 @@ export const updateOrderStatus = async (req, res) => {
 export const createOrderFromCart = async (req, res) => {
   try {
     const cart = await Cart.findOne({ user: req.user._id }).populate(
-      "items.food"
+      "items.food",
     );
 
     if (!cart || cart.items.length === 0) {
