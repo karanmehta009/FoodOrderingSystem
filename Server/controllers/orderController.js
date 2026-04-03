@@ -86,29 +86,33 @@ export const updateOrderStatus = async (req, res) => {
 
 export const createOrderFromCart = async (req, res) => {
   try {
-    const cart = await Cart
-      .findOne({ user: req.user._id })
-      .populate("items.food");
-      
+    const cart = await Cart.findOne({ user: req.user._id }).populate(
+      "items.food"
+    );
 
     if (!cart || cart.items.length === 0) {
-      return res.status(400).json({ message: "Cart is empty " });
+      return res.status(400).json({ message: "Cart is empty" });
     }
 
-    //Calculate total Price
     let totalPrice = 0;
-    const foodIds = cart.items.map((item) => {
+
+    // Prepare foods array for order
+    const orderFoods = cart.items.map((item) => {
       totalPrice += item.food.price * item.quantity;
-      return item.food._id;
+      return {
+        food: item.food._id,
+        quantity: item.quantity,
+      };
     });
 
-    //Create Order
+    // Create Order
     const order = await Order.create({
       user: req.user._id,
-      foods: foodIds,
+      foods: orderFoods,
       totalPrice,
     });
-    //clear cart
+
+    // Clear cart after order
     await Cart.findOneAndDelete({ user: req.user._id });
 
     res.status(201).json({

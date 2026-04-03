@@ -9,7 +9,7 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
-    // FIXED: foods must be an ARRAY, not a single ObjectId
+    
     foods: [
       {
         food: {
